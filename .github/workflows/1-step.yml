@@ -77,6 +77,15 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
+            // Ensure issues are created in the correct repository
+            // Only create issues if the current repository matches the expected one
+            expected_owner = "skills"
+            expected_repo = "integrate-mcp-with-copilot"
+            if (context.repo.owner !== expected_owner || context.repo.repo !== expected_repo) {
+              core.setFailed(`This workflow should only create issues in ${expected_owner}/${expected_repo}. Current: ${context.repo.owner}/${context.repo.repo}`);
+              return;
+            }
+
             async function createIssuesFromMarkdownFiles(dir, label) {
               // Get list of markdown files
               const files = fs.readdirSync(dir);
